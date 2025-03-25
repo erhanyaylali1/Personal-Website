@@ -37,6 +37,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "engines": {
+    "npm": "8.19.3"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
