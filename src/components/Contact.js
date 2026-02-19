@@ -169,7 +169,7 @@ const Contact = () => {
             className={classes.socialInfo}
             variant="overline"
           >
-            Mobile Phone: +45 50 23 19 14
+            Mobile Phone: +90 533 501 08 95
           </Typography>
         </Grid>
       </Grid>
@@ -217,16 +217,6 @@ const Contact = () => {
             >
               <Icon name="github" />
               <p>Github</p>
-            </a>
-          </Grid>
-          <Grid xs={12} md={3} item className={classes.items}>
-            <a
-              href="https://www.instagram.com/erhanyaylali/"
-              className={classes.button}
-              style={{ fontSize: width < 450 ? "1.3rem" : "1.3rem" }}
-            >
-              <Icon name="instagram" />
-              <p>Instagram</p>
             </a>
           </Grid>
         </Grid>
