@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# Erhan Yaylalı - Full Stack Developer Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, fast, and SEO-optimized portfolio website built with Next.js 15, React 19, and TypeScript.
 
-## Available Scripts
+## ��� Features
 
-In the project directory, you can run:
+- **Next.js 15** - Latest React framework for production
+- **React 19** - Latest React with improvements and optimizations
+- **TypeScript** - Full type safety across the codebase
+- **Styled Components** - CSS-in-JS for component styling
+- **SEO Optimized** - Complete metadata, OpenGraph, Twitter cards, and structured data
+- **Image Optimization** - Next.js Image component with automatic formats (AVIF/WebP)
+- **Responsive Design** - Mobile-first, fully responsive layout
+- **Performance** - Optimized for Core Web Vitals and Google Lighthouse
+- **EmailJS Integration** - Contact form with email notifications
 
-### `npm start`
+## ��� Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Install dependencies: `npm install`
+2. Setup `.env.local` with EmailJS credentials
+3. Run dev server: `npm run dev`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## ��� Deployment
 
-### `npm test`
+Deploy to Vercel or any Node.js hosting platform.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm run build
+npm start
+```
 
-### `npm run build`
+## ��� SEO & Performance
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- ✅ Meta tags (title, description, keywords)
+- ✅ Open Graph tags for social media
+- ✅ Image optimization (AVIF/WebP formats)
+- ✅ Core Web Vitals optimized
+- ✅ Responsive mobile-first design
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## ���️ Tech Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- React 19.2.4
+- Next.js 15.1.5
+- TypeScript 5.6.3
+- Styled Components 6.3.10
+- EmailJS for contact form
+- Node.js >= 20.0.0
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Built with ❤️ by Erhan Yaylalı

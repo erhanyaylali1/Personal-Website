@@ -1,0 +1,45 @@
+{
+  "name": "Erhan Yaylalı - Full Stack Developer Portfolio",
+  "short_name": "Erhan Yaylalı",
+  "description": "Full Stack Developer with expertise in React, Next.js, Node.js, Express.js, and AWS. Specialized in building scalable web applications.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1aa39c",
+  "background_color": "#ffffff",
+  "categories": ["technology", "business"],
+  "screenshots": [
+    {
+      "src": "/screenshot-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

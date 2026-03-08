@@ -1,0 +1,8 @@
+{
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/twitter-image/route": "/twitter-image",
+  "/opengraph-image/route": "/opengraph-image",
+  "/page": "/",
+  "/_not-found/page": "/_not-found"
+}

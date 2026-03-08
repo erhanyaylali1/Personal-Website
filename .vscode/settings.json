@@ -1,0 +1,13 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "xcopy": true,
+        "/^powershell Copy-Item -Path src/assets/\\* -Destination public/assets -Recurse -Force$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^powershell -Command \"Copy-Item -Path 'src/assets/\\*' -Destination 'public/assets' -Recurse -Force\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
