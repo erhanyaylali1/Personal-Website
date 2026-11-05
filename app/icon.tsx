@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BrandMark } from "@/lib/brand-mark";
 
 // Google Search shows a site's favicon only if it's square and a multiple of 48px;
 // 192 and 512 are the sizes browsers use when installing the site.
@@ -10,26 +11,5 @@ export function generateImageMetadata() {
 
 export default async function Icon({ id }: { id: Promise<string | number> }) {
   const s = Number(await id);
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#121317",
-          color: "#f2f1ee",
-          borderRadius: s * 0.22,
-          fontSize: s * 0.47,
-          fontWeight: 600,
-          letterSpacing: "-0.06em",
-        }}
-      >
-        EY
-      </div>
-    ),
-    { width: s, height: s },
-  );
+  return new ImageResponse(<BrandMark size={s} />, { width: s, height: s });
 }

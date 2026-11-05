@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { track } from "@/lib/track";
 import { Check, Copy } from "./ui/icons";
 
 export function CopyEmail({ email }: { email: string }) {
@@ -16,6 +17,7 @@ export function CopyEmail({ email }: { email: string }) {
     <button
       type="button"
       onClick={async () => {
+        track("email_copy", { placement: "contact" });
         try {
           await navigator.clipboard.writeText(email);
           setCopied(true);
