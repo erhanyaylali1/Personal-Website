@@ -11,16 +11,19 @@ import { ThemeToggle } from "./theme-toggle";
 import { Container } from "./ui/container";
 import { Close, Menu } from "./ui/icons";
 
-const navIds = ["about", "experience", "projects", "contact"] as const;
+/** Sections of the home page, highlighted while scrolling ("blog" only exists once posts are published). */
+const sectionIds = ["about", "experience", "projects", "blog", "contact"] as const;
+const navIds = ["about", "experience", "projects", "blog", "contact"] as const;
 
 export function SiteHeader() {
   const locale = useLocale();
   const t = ui[locale].header;
-  const nav = navIds.map((id) => ({ id, label: t.nav[id] }));
   // Locale-neutral path. The server renders the rewritten "/en/…" path and the browser shows "/…";
   // stripping the prefix makes both agree, so there's no hydration mismatch.
   const path = stripLocale(usePathname());
   const onHome = path === "/";
+  const inBlog = path === "/blog" || path.startsWith("/blog/");
+  const nav = navIds.map((id) => ({ id, label: t.nav[id], href: localePath(locale, id === "blog" ? "/blog" : `/#${id}`) }));
   const [active, setActive] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -35,7 +38,7 @@ export function SiteHeader() {
   // Highlight the section currently crossing the upper third of the viewport.
   useEffect(() => {
     if (!onHome) return;
-    const els = navIds.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
+    const els = sectionIds.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) if (e.isIntersecting) setActive(e.target.id);
@@ -72,12 +75,13 @@ export function SiteHeader() {
         <nav aria-label={t.primaryNav} className="hidden md:block">
           <ul className="flex items-center gap-1">
             {nav.map((n) => {
-              const isActive = onHome && active === n.id;
+              // Blog links to its own page, but on the home page it also tracks the "latest posts" section.
+              const isActive = (n.id === "blog" && inBlog) || (onHome && active === n.id);
               return (
                 <li key={n.id}>
                   <Link
-                    href={localePath(locale, `/#${n.id}`)}
-                    aria-current={isActive ? "location" : undefined}
+                    href={n.href}
+                    aria-current={isActive ? (inBlog ? "page" : "location") : undefined}
                     className={`relative rounded-full px-3.5 py-2 text-sm transition-colors duration-200 ${
                       isActive ? "text-fg" : "text-fg-muted hover:text-fg"
                     }`}
@@ -137,7 +141,7 @@ export function SiteHeader() {
             {nav.map((n) => (
               <li key={n.id}>
                 <Link
-                  href={localePath(locale, `/#${n.id}`)}
+                  href={n.href}
                   onClick={() => setOpen(false)}
                   className="block py-3 text-lg font-medium text-fg"
                 >

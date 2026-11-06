@@ -49,6 +49,7 @@ export function GET() {
     "",
     "## Optional",
     "",
+    `- [Blog](${siteUrl}/blog)`,
     `- [Turkish version of the site (Türkçe)](${siteUrl}/tr)`,
     `- [Privacy policy](${siteUrl}/privacy)`,
     `- [Sitemap](${siteUrl}/sitemap.xml)`,

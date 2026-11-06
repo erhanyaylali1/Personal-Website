@@ -9,7 +9,7 @@ const en = {
   newTab: "(opens in a new tab)",
 
   header: {
-    nav: { about: "About", experience: "Experience", projects: "Projects", contact: "Contact" },
+    nav: { about: "About", experience: "Experience", projects: "Projects", blog: "Blog", contact: "Contact" },
     primaryNav: "Primary",
     mobileNav: "Primary mobile",
     home: (name: string) => `${name}, home`,
@@ -86,6 +86,26 @@ const en = {
     by: (name: string) => `A project by ${name}`,
   },
 
+  blog: {
+    label: "Blog",
+    title: "Notes on building for the web.",
+    intro: "Write-ups on frontend, cloud and SEO work — what I tried, what worked and what I'd do differently.",
+    description: "Articles by Erhan Yaylalı on frontend development, cloud architecture, SEO and building web products.",
+    empty: "No posts yet — the first one is on its way.",
+    readMore: "Read more",
+    minRead: (n: number) => `${n} min read`,
+    views: (n: string) => `${n} views`,
+    allPosts: "All posts",
+    latestTitle: "Latest writing.",
+    latestIntro: "Notes from frontend, cloud and SEO work — the things I'd want to read before starting a similar project.",
+    morePosts: "More posts",
+    share: "Share this post",
+    shareOn: (network: string) => `Share on ${network}`,
+    copyLink: "Copy link",
+    copied: "Copied",
+    linkCopied: "Link copied",
+  },
+
   gallery: {
     open: (i: number, n: number, alt: string) => `Open screenshot ${i} of ${n}: ${alt}`,
     dialog: (title: string) => `${title} screenshots`,
@@ -135,7 +155,7 @@ const tr: UI = {
   newTab: "(yeni sekmede açılır)",
 
   header: {
-    nav: { about: "Hakkımda", experience: "Deneyim", projects: "Projeler", contact: "İletişim" },
+    nav: { about: "Hakkımda", experience: "Deneyim", projects: "Projeler", blog: "Blog", contact: "İletişim" },
     primaryNav: "Ana menü",
     mobileNav: "Mobil ana menü",
     home: (name) => `${name}, ana sayfa`,
@@ -209,6 +229,26 @@ const tr: UI = {
     next: "Sonraki proje",
     builtWith: (stack) => `${stack} ile geliştirildi.`,
     by: (name) => `Bir ${name} projesi`,
+  },
+
+  blog: {
+    label: "Blog",
+    title: "Web için ürün geliştirmeye dair notlar.",
+    intro: "Frontend, bulut ve SEO çalışmalarından notlar — neyi denedim, ne işe yaradı ve neyi farklı yapardım.",
+    description: "Erhan Yaylalı'nın frontend geliştirme, bulut mimarisi, SEO ve web ürünleri üzerine yazıları.",
+    empty: "Henüz yazı yok — ilki yolda.",
+    readMore: "Devamını oku",
+    minRead: (n) => `${n} dk okuma`,
+    views: (n) => `${n} görüntülenme`,
+    allPosts: "Tüm yazılar",
+    latestTitle: "Son yazılar.",
+    latestIntro: "Frontend, bulut ve SEO çalışmalarından notlar — benzer bir projeye başlamadan önce okumak isteyeceğim türden.",
+    morePosts: "Diğer yazılar",
+    share: "Bu yazıyı paylaş",
+    shareOn: (network) => `${network} ile paylaş`,
+    copyLink: "Bağlantıyı kopyala",
+    copied: "Kopyalandı",
+    linkCopied: "Bağlantı kopyalandı",
   },
 
   gallery: {

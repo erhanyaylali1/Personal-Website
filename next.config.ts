@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { optimizedImagePatterns } from "./lib/image-hosts";
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
@@ -6,6 +7,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
+    // Blog images uploaded to Supabase Storage (see lib/image-hosts.ts).
+    remotePatterns: optimizedImagePatterns(),
   },
   // A strict CSP is intentionally omitted: it needs per-request nonces for the inline
   // theme/consent/JSON-LD scripts, which would turn every static page dynamic.

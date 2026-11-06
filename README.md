@@ -27,10 +27,42 @@ All copy lives in typed files under `content/` — no component changes needed:
 
 The CV is served from `public/Erhan_Yaylali_CV.pdf`.
 
+## Blog & admin panel
+
+Posts are written in a rich text editor at **`/admin`** and published to `/blog` (English) or `/tr/blog` (Turkish) —
+each post has one language, chosen in the editor.
+
+- **Editor (Tiptap):** headings, bold/italic/underline/strike, font family, font size, text color, highlight (background color),
+  links, lists, quotes, code, alignment; images, videos (upload or YouTube) and audio (upload or record in the browser),
+  all resizable (stored as % of the text column) and alignable. Image alt text is required to publish.
+- **Drafts:** "Taslak olarak kaydet" / "Yayından kaldır, taslağa al" hides a post; drafts never appear publicly.
+- **Login:** password, default `1234` (or `ADMIN_PASSWORD` on first run). Change it under `/admin/settings`; it is stored as a
+  salted scrypt hash in the database and changing it signs out every other device. 5 wrong attempts lock the IP for 15 minutes.
+- **Storage:** Supabase — Postgres for posts/settings, Storage bucket `blog-media` for files. The browser uploads media straight
+  to Storage via one-time signed URLs (videos up to 50 MB would exceed serverless request limits).
+- **Security:** all post HTML is sanitized on save (`lib/blog/sanitize.ts`); tables use Row Level Security with no policies, so
+  only the server (secret key) can read or write them.
+
+### Setup
+
+1. Create a Supabase project and run `supabase/schema.sql` once in **SQL Editor** (safe to re-run).
+2. Set `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `ADMIN_SESSION_SECRET`
+   (see `.env.example`) in `.env.local` and in the hosting dashboard.
+
+Without Supabase variables the blog runs on an **in-memory demo store** (data is lost on restart) — handy for local work.
+
+| Path | What |
+| --- | --- |
+| `app/admin/` | Admin panel (own root layout, Turkish UI) and Server Actions |
+| `app/[lang]/blog/` | Public blog index and post pages |
+| `components/admin/` | Editor, toolbar, resizable media nodes, forms |
+| `lib/blog/` | Store (Supabase / memory), cached queries, sanitizer, text helpers |
+| `lib/auth/` | Signed session cookie and `requireAdmin()` |
+
 ## SEO
 
 - **Metadata API:** title template, descriptions clamped to ≤160 chars, canonical URLs, Open Graph (`profile` / `article`), Twitter cards
-- **Generated OG images:** `app/opengraph-image.tsx`, `app/projects/[slug]/opengraph-image.tsx`
+- **Generated OG images:** `app/[lang]/opengraph-image.tsx`, `app/[lang]/projects/[slug]/opengraph-image.tsx`
 - **JSON-LD** (`lib/jsonld.tsx`), one linked `@graph` per page:
   - home: `ProfilePage`, `Person`, `WebSite`, `ItemList` of projects
   - `/projects`: `CollectionPage`, `ItemList`, `BreadcrumbList`

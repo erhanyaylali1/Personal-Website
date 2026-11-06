@@ -6,7 +6,7 @@ import { Container } from "../ui/container";
 import { ArrowUpRight } from "../ui/icons";
 import { Reveal } from "../ui/reveal";
 
-export async function Contact() {
+export async function Contact({ index }: { index: string }) {
   const locale = await getLocale();
   const t = ui[locale];
   return (
@@ -14,7 +14,7 @@ export async function Contact() {
       <Container>
         <Reveal>
           <p className="font-mono text-xs tracking-[0.16em] text-fg-subtle uppercase">
-            <span className="text-accent">04</span>
+            <span className="text-accent">{index}</span>
             <span aria-hidden="true"> — </span>
             {t.contact.label}
           </p>

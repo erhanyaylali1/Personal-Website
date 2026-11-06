@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Analytics } from "@/components/analytics";
 import { CookieBanner } from "@/components/cookie-banner";
@@ -11,19 +10,10 @@ import { getProfile, getSite, gtmId, siteUrl } from "@/content/profile";
 import { getSkillNames } from "@/content/toolkit";
 import { ui } from "@/content/ui";
 import { consentDefaultsScript } from "@/lib/consent";
+import { fontVariables } from "@/lib/fonts";
 import { hasLocale, languageAlternates, locales, ogLocales } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
 import "../globals.css";
-
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin", "latin-ext"], display: "swap" });
-// Mono renders labels, dates and tech names; latin-ext covers Turkish letters such as the "İ" in "İzmir".
-// Not preloaded so it doesn't compete with the LCP image. Sans keeps latin-ext too (e.g. "ı" in Yaylalı).
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-  preload: false,
-});
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -82,7 +72,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   return (
-    <html lang={lang} suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang={lang} suppressHydrationWarning className={fontVariables}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {/* Consent Mode defaults (all denied) must exist before any Google tag. */}

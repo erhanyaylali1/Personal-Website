@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { projectSlugs } from "@/content/project-slugs";
+import { SESSION_COOKIE, readSessionToken } from "@/lib/auth/session";
+import { SLUG_PATTERN } from "@/lib/blog/text";
 import { defaultLocale, hasLocale } from "@/lib/i18n";
 
 const known = new Set<string>(projectSlugs);
@@ -14,6 +16,8 @@ function isKnownPage(path: string) {
   if (tail.length > 0) return false;
   if (section === undefined) return true;
   if (section === "projects") return slug === undefined ? !ogImage : known.has(slug);
+  // Posts live in the database; the page itself 404s for unknown slugs.
+  if (section === "blog") return !ogImage && (slug === undefined || SLUG_PATTERN.test(slug));
   return section === "privacy" && slug === undefined && !ogImage;
 }
 
@@ -27,8 +31,17 @@ function isKnownPage(path: string) {
  * Calling notFound() while rendering would happen after streaming has started and return HTTP 200
  * (a soft 404); deciding here, before rendering, guarantees a real 404 for crawlers.
  */
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Admin panel: not localized. Optimistic gate — visitors without a valid cookie are bounced to the
+  // sign-in page before anything renders; requireAdmin() in every page and action is the real check.
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    if (pathname !== "/admin" && (await readSessionToken(request.cookies.get(SESSION_COOKIE)?.value)) === null) {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
+    return NextResponse.next();
+  }
   const [, first = ""] = pathname.split("/");
   const prefixed = hasLocale(first);
   const locale = prefixed ? first : defaultLocale;
@@ -52,7 +65,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except Next.js internals, files with an extension (sitemap.xml, robots.txt, llms.txt,
-  // the CV PDF, …) and the root-level generated icons.
-  matcher: ["/((?!_next/|icon(?:/|$)|apple-icon(?:/|$)|.*\\.[^/]+$).*)"],
+  // Everything except Next.js internals, route handlers under /api, files with an extension
+  // (sitemap.xml, robots.txt, llms.txt, the CV PDF, …) and the root-level generated icons.
+  matcher: ["/((?!_next/|api/|icon(?:/|$)|apple-icon(?:/|$)|.*\\.[^/]+$).*)"],
 };

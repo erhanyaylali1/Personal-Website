@@ -119,3 +119,135 @@
     animation-delay: calc(var(--i, 0) * 80ms);
   }
 }
+
+/*
+  Article typography — shared by the public post page and the admin editor,
+  so what's written is exactly what's published.
+*/
+@layer components {
+  .prose-blog {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: var(--fg);
+    overflow-wrap: break-word;
+  }
+  .prose-blog > * + * {
+    margin-top: 1.25em;
+  }
+  .prose-blog h2,
+  .prose-blog h3,
+  .prose-blog h4 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .prose-blog h2 { font-size: 1.875rem; margin-top: 2em; }
+  .prose-blog h3 { font-size: 1.5rem; margin-top: 1.75em; }
+  .prose-blog h4 { font-size: 1.25rem; margin-top: 1.5em; }
+  .prose-blog h2 + *,
+  .prose-blog h3 + *,
+  .prose-blog h4 + * {
+    margin-top: 0.75em;
+  }
+  .prose-blog a {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 4px;
+    transition: text-decoration-color 150ms;
+  }
+  .prose-blog a:hover { text-decoration-color: currentColor; }
+  .prose-blog strong { font-weight: 600; }
+  /* Highlight colors are light pastels, so highlighted text is always dark — also in dark mode. */
+  .prose-blog mark {
+    background-color: #fde68a;
+    color: #1a1d23;
+    border-radius: 3px;
+    padding: 0.05em 0.15em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  .prose-blog ul, .prose-blog ol { padding-left: 1.4em; }
+  .prose-blog ul { list-style: disc; }
+  .prose-blog ol { list-style: decimal; }
+  .prose-blog li + li { margin-top: 0.5em; }
+  .prose-blog li::marker { color: var(--fg-subtle); }
+  .prose-blog li > p { margin: 0; }
+  .prose-blog blockquote {
+    border-left: 2px solid var(--accent);
+    padding-left: 1.25em;
+    font-size: 1.25rem;
+    line-height: 1.55;
+    color: var(--fg-muted);
+  }
+  .prose-blog hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 2.5em 0;
+  }
+  .prose-blog code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background-color: var(--surface-2);
+    border-radius: 4px;
+    padding: 0.1em 0.3em;
+  }
+  .prose-blog pre {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1em 1.25em;
+    overflow-x: auto;
+  }
+  .prose-blog pre code { background: none; padding: 0; font-size: inherit; }
+  /* Media width comes from the editor as an inline % (data-width); default is the full column. */
+  .prose-blog img,
+  .prose-blog video,
+  .prose-blog audio {
+    display: block;
+    width: 100%;
+    margin-inline: auto;
+  }
+  .prose-blog img,
+  .prose-blog video {
+    min-width: min(100%, 18rem); /* small media stays usable on phones */
+    height: auto;
+    border-radius: 0.75rem;
+    background-color: var(--surface);
+  }
+  .prose-blog video { background-color: #000; }
+  .prose-blog audio { min-width: min(100%, 16rem); }
+  .prose-blog :is(img, video, audio)[data-align="left"] { margin-inline: 0 auto; }
+  .prose-blog :is(img, video, audio)[data-align="right"] { margin-inline: auto 0; }
+  .prose-blog div[data-youtube-video] iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.75rem;
+    background-color: #000;
+  }
+}
+
+/* Editor-only affordances (Tiptap). */
+@layer components {
+  /* Resizable media node views: sizing is handled by the wrapper. */
+  .tiptap .rt-media :is(img, video, audio) {
+    min-width: 0;
+    margin: 0;
+  }
+  .tiptap p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+    color: var(--fg-subtle);
+  }
+  .tiptap div[data-youtube-video].ProseMirror-selectednode iframe {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
