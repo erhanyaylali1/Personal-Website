@@ -12,9 +12,14 @@ import { consentDefaultsScript } from "@/lib/consent";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin", "latin-ext"], display: "swap" });
-// Mono only renders ASCII labels, dates and tech names (verified), so latin is enough; not preloaded so it
+// Mono renders labels, dates and tech names; latin-ext covers the "İ" in the hero's "İzmir". Not preloaded so it
 // doesn't compete with the LCP image. Sans keeps latin-ext for Turkish letters (e.g. "ı" in Yaylalı).
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap", preload: false });
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+  preload: false,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -28,7 +33,8 @@ export const metadata: Metadata = {
     profile.name,
     profile.alternateName,
     profile.jobTitle,
-    "Software Developer Istanbul",
+    "Software Developer İzmir",
+    "Software Developer Izmir",
     "Frontend Developer",
     "Full Stack Developer",
     ...skillNames,

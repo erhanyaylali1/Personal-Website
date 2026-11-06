@@ -30,6 +30,8 @@ export const toolkit: ToolkitGroup[] = [
       { name: "WebSockets", detail: "Socket.IO", core: true }, // Erhan Oyunları
       { name: "Express" }, // Rich Blog Post, E-Wallet, Erhan Oyunları
       { name: "JWT auth" }, // Rich Blog Post, E-Wallet
+      { name: "Java", detail: "Spring" }, // Yapı Kredi Technology
+      { name: "C#", detail: ".NET" }, // Ibtech
     ],
   },
   {
@@ -38,8 +40,8 @@ export const toolkit: ToolkitGroup[] = [
       { name: "AWS", detail: "Lambda, S3, Athena, Glue", core: true }, // Accenture
       { name: "Docker", core: true }, // Accenture
       { name: "Terraform", core: true }, // Accenture (IaC)
-      { name: "Firebase" }, // Spordaş
-      { name: "Google Cloud" }, // Rich Blog Post, Erhan Oyunları hosting
+      { name: "Google Cloud", core: true }, // Orion Innovation (built from scratch), Rich Blog Post, Erhan Oyunları hosting
+      { name: "Firebase" }, // Orion Innovation, Spordaş
       { name: "Vercel & Netlify" }, // Rich Blog Post, Reyhan Eren
     ],
   },
@@ -55,7 +57,7 @@ export const toolkit: ToolkitGroup[] = [
     items: [
       { name: "MySQL" }, // E-Wallet
       { name: "MongoDB" }, // Rich Blog Post
-      { name: "Cloud Firestore" }, // Spordaş
+      { name: "Cloud Firestore" }, // Orion Innovation, Spordaş
       { name: "Sequelize" }, // E-Wallet
     ],
   },
@@ -64,6 +66,7 @@ export const toolkit: ToolkitGroup[] = [
     items: [
       { name: "Technical SEO", core: true }, // Hesehus, Reyhan Eren
       { name: "Accessibility", detail: "WCAG", core: true }, // Hesehus
+      { name: "Unit testing" }, // Yapı Kredi Technology
       { name: "Structured data", detail: "JSON-LD" }, // Reyhan Eren, this site
       { name: "Analytics", detail: "GA / GTM" }, // Reyhan Eren, CV (Google Console)
       { name: "Figma" }, // Civil Defence Ukraine
