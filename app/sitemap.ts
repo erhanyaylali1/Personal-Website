@@ -5,6 +5,12 @@ import { getPublishedPosts } from "@/lib/blog/queries";
 import { getBuildDate } from "@/lib/build-date";
 import { localePath, locales } from "@/lib/i18n";
 
+/**
+ * Next.js writes image URLs into <image:loc> without XML-escaping them, so a URL with a query string
+ * (e.g. "?e=1&v=beta" on a hot-linked cover) produced invalid XML and Search Console rejected the whole file.
+ */
+const xmlEscape = (url: string) => url.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 /** Every page in every language, each listing its translations (hreflang) so search engines pair them up. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = await getBuildDate();
@@ -18,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       path: `/projects/${p.slug}`,
       changeFrequency: "yearly" as const,
       priority: 0.7,
-      images: p.images.slice(0, 4).map((i) => `${siteUrl}${i.src.src}`),
+      images: p.images.slice(0, 4).map((i) => xmlEscape(`${siteUrl}${i.src.src}`)),
     })),
     { path: "/blog", changeFrequency: "monthly", priority: 0.8 },
     { path: "/privacy", changeFrequency: "yearly", priority: 0.2 },
@@ -28,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly" as const,
       priority: 0.6,
       ...(p.publishedAt && { lastModified: p.publishedAt }),
-      ...(p.coverImage?.startsWith("http") && { images: [p.coverImage] }),
+      ...(p.coverImage?.startsWith("http") && { images: [xmlEscape(p.coverImage)] }),
     })),
   ];
 
