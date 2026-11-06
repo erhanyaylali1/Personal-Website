@@ -1,19 +1,25 @@
-import { education } from "@/content/education";
-import { experience } from "@/content/experience";
+import { getEducation } from "@/content/education";
+import { getExperience } from "@/content/experience";
+import { ui } from "@/content/ui";
 import { getBuildDate } from "@/lib/build-date";
 import { formatDuration, formatMonth } from "@/lib/format";
+import { getLocale } from "@/lib/locale";
 import { Reveal } from "../ui/reveal";
 import { Section } from "../ui/section";
 
 export async function Experience() {
   const now = new Date(await getBuildDate());
+  const locale = await getLocale();
+  const experience = getExperience(locale);
+  const education = getEducation(locale);
+  const t = ui[locale].experience;
   return (
     <Section
       id="experience"
       index="02"
-      label="Experience"
-      title="Seven roles, four markets."
-      intro="From an IBM internship to senior work at Accenture — across banking, consulting and digitalization."
+      label={t.label}
+      title={t.title}
+      intro={t.intro}
       className="border-t border-border"
     >
       <ol className="border-t border-border">
@@ -24,12 +30,12 @@ export async function Experience() {
               <article className="grid gap-x-8 gap-y-3 py-8 md:grid-cols-12 md:py-10">
                 <div className="md:col-span-3">
                   <p className="font-mono text-[13px] text-fg-muted tabular-nums">
-                    <time dateTime={job.start}>{formatMonth(job.start)}</time>
+                    <time dateTime={job.start}>{formatMonth(job.start, locale)}</time>
                     <span aria-hidden="true"> – </span>
-                    <span className="sr-only"> to </span>
-                    {current ? "Present" : <time dateTime={job.end!}>{formatMonth(job.end!)}</time>}
+                    <span className="sr-only">{t.to}</span>
+                    {current ? t.present : <time dateTime={job.end!}>{formatMonth(job.end!, locale)}</time>}
                   </p>
-                  <p className="mt-1 font-mono text-xs text-fg-subtle">{formatDuration(job.start, job.end, now)}</p>
+                  <p className="mt-1 font-mono text-xs text-fg-subtle">{formatDuration(job.start, job.end, now, locale)}</p>
                 </div>
 
                 <div className="md:col-span-9">
@@ -42,7 +48,7 @@ export async function Experience() {
                     {current && (
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-fg">
                         <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
-                        Current
+                        {t.current}
                       </span>
                     )}
                   </div>
@@ -60,7 +66,7 @@ export async function Experience() {
                   )}
 
                   {job.stack && (
-                    <ul className="mt-5 flex flex-wrap gap-1.5" aria-label={`Technologies used at ${job.company}`}>
+                    <ul className="mt-5 flex flex-wrap gap-1.5" aria-label={t.technologies(job.company)}>
                       {job.stack.map((s) => (
                         <li key={s} className="rounded-md bg-surface px-2 py-1 font-mono text-xs text-fg-muted">
                           {s}
@@ -77,7 +83,7 @@ export async function Experience() {
 
       <div id="education" className="mt-24 scroll-mt-24">
         <Reveal>
-          <h3 className="font-mono text-xs tracking-[0.16em] text-fg-subtle uppercase">Education</h3>
+          <h3 className="font-mono text-xs tracking-[0.16em] text-fg-subtle uppercase">{t.education}</h3>
         </Reveal>
         <ol className="mt-6 border-t border-border">
           {education.map((ed, i) => (
@@ -86,7 +92,7 @@ export async function Experience() {
                 <p className="font-mono text-[13px] text-fg-muted tabular-nums md:col-span-3">
                   <time dateTime={ed.start}>{ed.start}</time>
                   <span aria-hidden="true"> – </span>
-                  <span className="sr-only"> to </span>
+                  <span className="sr-only">{t.to}</span>
                   <time dateTime={ed.end}>{ed.end}</time>
                 </p>
                 <div className="md:col-span-9">

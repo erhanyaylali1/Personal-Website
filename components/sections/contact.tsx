@@ -1,23 +1,28 @@
 import { profile } from "@/content/profile";
+import { ui } from "@/content/ui";
+import { getLocale } from "@/lib/locale";
 import { CopyEmail } from "../copy-email";
 import { Container } from "../ui/container";
 import { ArrowUpRight } from "../ui/icons";
 import { Reveal } from "../ui/reveal";
 
-export function Contact() {
+export async function Contact() {
+  const locale = await getLocale();
+  const t = ui[locale];
   return (
     <section id="contact" aria-labelledby="contact-heading" className="border-t border-border py-24 sm:py-36">
       <Container>
         <Reveal>
           <p className="font-mono text-xs tracking-[0.16em] text-fg-subtle uppercase">
             <span className="text-accent">04</span>
-            <span aria-hidden="true"> — </span>Contact
+            <span aria-hidden="true"> — </span>
+            {t.contact.label}
           </p>
           <h2 id="contact-heading" className="mt-6 max-w-[18ch] text-display font-semibold text-fg">
-            Let&apos;s build something people enjoy using.
+            {t.contact.title}
           </h2>
           <p className="mt-6 max-w-[52ch] text-lede text-fg-muted">
-            Open to conversations about frontend, full-stack and cloud work. The quickest way to reach me is email.
+            {t.contact.body}
           </p>
         </Reveal>
 
@@ -47,7 +52,7 @@ export function Contact() {
                 >
                   {s.label}
                   <ArrowUpRight className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  <span className="sr-only">(opens in a new tab)</span>
+                  <span className="sr-only">{t.newTab}</span>
                 </a>
               ))}
             </div>

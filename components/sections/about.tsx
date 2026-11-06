@@ -1,11 +1,17 @@
-import { profile } from "@/content/profile";
-import { toolkit } from "@/content/toolkit";
+import { getProfile } from "@/content/profile";
+import { getToolkit } from "@/content/toolkit";
+import { ui } from "@/content/ui";
+import { getLocale } from "@/lib/locale";
 import { Reveal } from "../ui/reveal";
 import { Section } from "../ui/section";
 
-export function About() {
+export async function About() {
+  const locale = await getLocale();
+  const profile = getProfile(locale);
+  const toolkit = getToolkit(locale);
+  const t = ui[locale].about;
   return (
-    <Section id="about" index="01" label="About" title="Engineering with the user — and the business — in mind.">
+    <Section id="about" index="01" label={t.label} title={t.title}>
       <div className="grid gap-12 md:grid-cols-12">
         <div className="space-y-6 md:col-span-7 md:col-start-4">
           {profile.about.map((p, i) => (
@@ -18,10 +24,10 @@ export function About() {
 
       <div className="mt-16 grid gap-10 border-t border-border pt-10 md:grid-cols-12">
         <Reveal className="md:col-span-3">
-          <h3 className="font-mono text-xs tracking-[0.16em] text-fg-subtle uppercase">Toolkit</h3>
+          <h3 className="font-mono text-xs tracking-[0.16em] text-fg-subtle uppercase">{t.toolkit}</h3>
           <p className="mt-4 flex items-center gap-2 text-sm text-fg-muted">
             <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
-            Core skills
+            {t.coreSkills}
           </p>
         </Reveal>
 
@@ -42,7 +48,7 @@ export function About() {
                     {item.core && <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />}
                     {item.name}
                     {item.detail && <span className="text-fg-subtle">· {item.detail}</span>}
-                    {item.core && <span className="sr-only"> (core skill)</span>}
+                    {item.core && <span className="sr-only"> {t.coreSkill}</span>}
                   </li>
                 ))}
               </ul>

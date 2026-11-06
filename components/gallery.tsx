@@ -3,11 +3,14 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ProjectImage } from "@/content/project-images";
+import { ui } from "@/content/ui";
+import { useLocale } from "./providers";
 import { ChevronLeft, ChevronRight, Close } from "./ui/icons";
 
 type Props = { images: ProjectImage[]; title: string; portrait: boolean };
 
 export function Gallery({ images, title, portrait }: Props) {
+  const t = ui[useLocale()].gallery;
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [index, setIndex] = useState<number | null>(null);
 
@@ -42,7 +45,7 @@ export function Gallery({ images, title, portrait }: Props) {
                 type="button"
                 onClick={() => open(i)}
                 className="group block w-full overflow-hidden rounded-xl border border-border bg-surface transition-[border-color,box-shadow] duration-300 hover:border-border-strong hover:shadow-(--shadow-lift)"
-                aria-label={`Open screenshot ${i + 1} of ${images.length}: ${img.alt}`}
+                aria-label={t.open(i + 1, images.length, img.alt)}
               >
                 <Image
                   src={img.src}
@@ -60,7 +63,7 @@ export function Gallery({ images, title, portrait }: Props) {
 
       <dialog
         ref={dialogRef}
-        aria-label={`${title} screenshots`}
+        aria-label={t.dialog(title)}
         onClose={() => setIndex(null)}
         onClick={(e) => e.target === e.currentTarget && dialogRef.current?.close()}
         className="m-auto h-dvh max-h-none w-screen max-w-none bg-transparent p-0 backdrop:bg-black/85 backdrop:backdrop-blur-sm"
@@ -76,7 +79,7 @@ export function Gallery({ images, title, portrait }: Props) {
               className="max-h-[calc(100dvh-9rem)] w-auto max-w-full rounded-lg object-contain"
             />
             <div className="flex w-full max-w-3xl items-center justify-between gap-4 text-white">
-              <button type="button" onClick={() => step(-1)} aria-label="Previous screenshot" className="inline-flex size-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20">
+              <button type="button" onClick={() => step(-1)} aria-label={t.previous} className="inline-flex size-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20">
                 <ChevronLeft width={20} height={20} />
               </button>
               <p className="text-center text-sm text-white/80" aria-live="polite">
@@ -84,7 +87,7 @@ export function Gallery({ images, title, portrait }: Props) {
                 <span className="mx-2 text-white/40" aria-hidden="true">·</span>
                 {current.alt}
               </p>
-              <button type="button" onClick={() => step(1)} aria-label="Next screenshot" className="inline-flex size-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20">
+              <button type="button" onClick={() => step(1)} aria-label={t.next} className="inline-flex size-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20">
                 <ChevronRight width={20} height={20} />
               </button>
             </div>
@@ -92,7 +95,7 @@ export function Gallery({ images, title, portrait }: Props) {
               type="button"
               autoFocus
               onClick={() => dialogRef.current?.close()}
-              aria-label="Close"
+              aria-label={t.close}
               className="absolute top-4 right-4 inline-flex size-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
             >
               <Close width={20} height={20} />

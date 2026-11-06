@@ -38,6 +38,9 @@ function visibleText(a: HTMLAnchorElement): string {
   return (clone.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 100);
 }
 
+/** A case study page in any language: "/projects/<slug>" or "/tr/projects/<slug>". */
+const PROJECT_PAGE = /^(?:\/[a-z]{2})?\/projects\/([^/]+)\/?$/;
+
 /** Turns a click on any link into the right event. Used as one delegated document listener. */
 export function trackLinkClick(e: MouseEvent) {
   if (e.type === "auxclick" && e.button !== 1) return; // count middle-click (open in new tab), ignore right-click
@@ -51,13 +54,13 @@ export function trackLinkClick(e: MouseEvent) {
   if (a.hasAttribute("download") || /\.pdf$/i.test(url.pathname)) return track("cv_download", { ...base, file_name: url.pathname.split("/").pop() });
 
   if (url.origin === location.origin) {
-    const slug = url.pathname.match(/^\/projects\/([^/]+)\/?$/)?.[1];
-    if (slug && !location.pathname.startsWith(`/projects/${slug}`)) track("project_click", { ...base, project: slug });
+    const slug = url.pathname.match(PROJECT_PAGE)?.[1];
+    if (slug && location.pathname.match(PROJECT_PAGE)?.[1] !== slug) track("project_click", { ...base, project: slug });
     return;
   }
 
   if (a.relList.contains("me")) return track("social_click", { ...base, platform: url.hostname.replace(/^www\./, "").split(".")[0] });
-  const project = location.pathname.match(/^\/projects\/([^/]+)/)?.[1];
+  const project = location.pathname.match(PROJECT_PAGE)?.[1];
   if (project) return track("project_link_click", { ...base, project, link_url: url.href });
   track("outbound_click", { ...base, link_url: url.href });
 }

@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ui } from "@/content/ui";
 import { track } from "@/lib/track";
+import { useLocale } from "./providers";
 import { Check, Copy } from "./ui/icons";
 
 export function CopyEmail({ email }: { email: string }) {
+  const t = ui[useLocale()].contact;
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -28,9 +31,9 @@ export function CopyEmail({ email }: { email: string }) {
       className="inline-flex h-11 items-center gap-2 rounded-full border border-border-strong px-5 text-sm font-medium text-fg transition-[background-color,border-color,transform] duration-200 hover:border-fg/40 hover:bg-surface active:scale-[0.98]"
     >
       {copied ? <Check className="text-accent" /> : <Copy />}
-      <span>{copied ? "Copied" : "Copy email"}</span>
+      <span>{copied ? t.copied : t.copy}</span>
       <span role="status" aria-live="polite" className="sr-only">
-        {copied ? "Email address copied to clipboard" : ""}
+        {copied ? t.copiedStatus : ""}
       </span>
     </button>
   );

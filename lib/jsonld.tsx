@@ -1,19 +1,27 @@
 import type { StaticImageData } from "next/image";
-import { education } from "@/content/education";
-import { experience } from "@/content/experience";
-import { profile, site, siteUrl } from "@/content/profile";
+import { getEducation } from "@/content/education";
+import { getExperience } from "@/content/experience";
+import { getProfile, getSite, siteUrl } from "@/content/profile";
 import type { Project } from "@/content/projects";
-import { skillNames } from "@/content/toolkit";
+import { getSkillNames } from "@/content/toolkit";
+import { ui } from "@/content/ui";
+import { localePath, type Locale } from "./i18n";
 
 /**
  * Structured data. Every page emits one @graph; entities are linked by @id so search
  * engines can merge them into a single picture of the person, the site and the work.
+ * The Person and WebSite are shared across languages; pages and lists get one @id per language.
  */
 export const personId = `${siteUrl}/#person`;
 export const websiteId = `${siteUrl}/#website`;
-export const projectsListId = `${siteUrl}/projects#list`;
 
 const abs = (path: string) => `${siteUrl}${path}`;
+/** Absolute URL of a locale-neutral path in the given language. */
+const url = (locale: Locale, path: string) => abs(localePath(locale, path)).replace(/\/$/, "");
+// Keeps the original English @id ("…/#profilepage") stable.
+const profilePageId = (locale: Locale) => `${abs(localePath(locale, "/"))}#profilepage`;
+const projectsListId = (locale: Locale) => `${url(locale, "/projects")}#list`;
+
 const imageObject = (img: StaticImageData, caption: string) => ({
   "@type": "ImageObject",
   url: abs(img.src),
@@ -28,8 +36,10 @@ const orgUrls: Record<string, string> = {
   Accenture: "https://www.accenture.com",
 };
 
-export function personSchema(photo?: StaticImageData) {
-  const current = experience.find((e) => e.end === null);
+export function personSchema(locale: Locale, photo?: StaticImageData) {
+  const profile = getProfile(locale);
+  const current = getExperience(locale).find((e) => e.end === null);
+  const skills = getSkillNames(locale);
   return {
     "@type": "Person",
     "@id": personId,
@@ -40,9 +50,9 @@ export function personSchema(photo?: StaticImageData) {
     jobTitle: profile.jobTitle,
     description: profile.summary,
     url: siteUrl,
-    mainEntityOfPage: { "@id": `${siteUrl}/#profilepage` },
+    mainEntityOfPage: { "@id": profilePageId(locale) },
     email: `mailto:${profile.email}`,
-    ...(photo && { image: imageObject(photo, `Portrait of ${profile.name}`) }),
+    ...(photo && { image: imageObject(photo, ui[locale].hero.portraitAlt) }),
     address: {
       "@type": "PostalAddress",
       addressLocality: profile.location.city,
@@ -57,7 +67,7 @@ export function personSchema(photo?: StaticImageData) {
       "@type": "Occupation",
       name: profile.jobTitle,
       occupationLocation: { "@type": "City", name: profile.location.city },
-      skills: skillNames.join(", "),
+      skills: skills.join(", "),
     },
     ...(current && {
       worksFor: {
@@ -66,107 +76,112 @@ export function personSchema(photo?: StaticImageData) {
         ...(orgUrls[current.company] && { url: orgUrls[current.company] }),
       },
     }),
-    alumniOf: education.map((e) => ({
+    alumniOf: getEducation(locale).map((e) => ({
       "@type": "EducationalOrganization",
       name: e.institution,
       ...(e.url && { url: e.url }),
     })),
-    knowsAbout: skillNames,
-    sameAs: profile.socials.map((s) => s.href),
+    knowsAbout: skills,
+    sameAs: getProfile(locale).socials.map((s) => s.href),
   };
 }
 
-/** Lightweight reference used on pages where the full Person lives elsewhere. */
-const personRef = () => ({ "@type": "Person", "@id": personId, name: profile.name, url: siteUrl });
+/** Lightweight references used on pages where the full entities live elsewhere. */
+const personRef = (locale: Locale) => ({ "@type": "Person", "@id": personId, name: getProfile(locale).name, url: siteUrl });
+const websiteRef = (locale: Locale) => ({ "@type": "WebSite", "@id": websiteId, url: siteUrl, name: getProfile(locale).name });
 
-export function websiteSchema() {
+export function websiteSchema(locale: Locale) {
+  const profile = getProfile(locale);
   return {
     "@type": "WebSite",
     "@id": websiteId,
     url: siteUrl,
     name: profile.name,
     alternateName: profile.alternateName,
-    description: site.description,
-    inLanguage: "en",
+    description: getSite(locale).description,
+    inLanguage: ["en", "tr"],
     publisher: { "@id": personId },
     author: { "@id": personId },
   };
 }
 
-export function projectsListSchema(projects: Project[]) {
+export function projectsListSchema(locale: Locale, projects: Project[]) {
   return {
     "@type": "ItemList",
-    "@id": projectsListId,
-    name: `Projects by ${profile.name}`,
+    "@id": projectsListId(locale),
+    name: ui[locale].projectsPage.listName(getProfile(locale).name),
     numberOfItems: projects.length,
     itemListElement: projects.map((p, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: abs(`/projects/${p.slug}`),
+      url: url(locale, `/projects/${p.slug}`),
       name: p.title,
     })),
   };
 }
 
-export function profilePageSchema(photo: StaticImageData, projects: Project[], dateModified: string) {
+export function profilePageSchema(locale: Locale, photo: StaticImageData, projects: Project[], dateModified: string) {
+  const site = getSite(locale);
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "ProfilePage",
-        "@id": `${siteUrl}/#profilepage`,
-        url: siteUrl,
+        "@id": profilePageId(locale),
+        url: url(locale, "/"),
         name: site.title,
         description: site.description,
-        inLanguage: "en",
+        inLanguage: locale,
         isPartOf: { "@id": websiteId },
         mainEntity: { "@id": personId },
-        primaryImageOfPage: imageObject(photo, `Portrait of ${profile.name}`),
-        hasPart: { "@id": projectsListId },
+        primaryImageOfPage: imageObject(photo, ui[locale].hero.portraitAlt),
+        hasPart: { "@id": projectsListId(locale) },
         dateModified,
       },
-      personSchema(photo),
-      websiteSchema(),
-      projectsListSchema(projects),
+      personSchema(locale, photo),
+      websiteSchema(locale),
+      projectsListSchema(locale, projects),
     ],
   };
 }
 
-const breadcrumb = (id: string, trail: { name: string; path: string }[]) => ({
+const breadcrumb = (locale: Locale, id: string, trail: { name: string; path: string }[]) => ({
   "@type": "BreadcrumbList",
   "@id": id,
-  itemListElement: trail.map((t, i) => ({ "@type": "ListItem", position: i + 1, name: t.name, item: abs(t.path) })),
+  itemListElement: trail.map((t, i) => ({ "@type": "ListItem", position: i + 1, name: t.name, item: url(locale, t.path) })),
 });
 
-export function projectsPageSchema(projects: Project[]) {
-  const url = abs("/projects");
+export function projectsPageSchema(locale: Locale, projects: Project[]) {
+  const t = ui[locale];
+  const pageUrl = url(locale, "/projects");
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "CollectionPage",
-        "@id": `${url}#webpage`,
-        url,
-        name: `Projects — ${profile.name}`,
-        inLanguage: "en",
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: `${t.projectsPage.title} — ${getProfile(locale).name}`,
+        inLanguage: locale,
         isPartOf: { "@id": websiteId },
         about: { "@id": personId },
-        mainEntity: { "@id": projectsListId },
-        breadcrumb: { "@id": `${url}#breadcrumb` },
+        mainEntity: { "@id": projectsListId(locale) },
+        breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
       },
-      projectsListSchema(projects),
-      breadcrumb(`${url}#breadcrumb`, [
-        { name: "Home", path: "/" },
-        { name: "Projects", path: "/projects" },
+      projectsListSchema(locale, projects),
+      breadcrumb(locale, `${pageUrl}#breadcrumb`, [
+        { name: t.breadcrumb.home, path: "/" },
+        { name: t.projectsPage.title, path: "/projects" },
       ]),
-      personRef(),
-      { "@type": "WebSite", "@id": websiteId, url: siteUrl, name: profile.name },
+      personRef(locale),
+      websiteRef(locale),
     ],
   };
 }
 
-export function projectSchema(project: Project) {
-  const url = abs(`/projects/${project.slug}`);
+export function projectSchema(locale: Locale, project: Project) {
+  const t = ui[locale];
+  const pageUrl = url(locale, `/projects/${project.slug}`);
   const isApp = project.category === "Web application" || project.category === "Mobile-first web app";
   const cover = project.images[0];
   return {
@@ -174,24 +189,25 @@ export function projectSchema(project: Project) {
     "@graph": [
       {
         "@type": "WebPage",
-        "@id": `${url}#webpage`,
-        url,
-        name: `${project.title} — ${project.category}`,
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: `${project.title} — ${t.projects.categories[project.category]}`,
         description: project.summary,
-        inLanguage: "en",
+        inLanguage: locale,
         isPartOf: { "@id": websiteId },
-        breadcrumb: { "@id": `${url}#breadcrumb` },
+        breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
         primaryImageOfPage: imageObject(cover.src, cover.alt),
-        mainEntity: { "@id": `${url}#work` },
+        mainEntity: { "@id": `${pageUrl}#work` },
       },
       {
         "@type": isApp ? "SoftwareApplication" : "CreativeWork",
-        "@id": `${url}#work`,
+        "@id": `${pageUrl}#work`,
         name: project.title,
         description: project.description.join(" "),
         abstract: project.summary,
-        url,
-        mainEntityOfPage: { "@id": `${url}#webpage` },
+        url: pageUrl,
+        inLanguage: locale,
+        mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
         image: project.images.slice(0, 4).map((i) => imageObject(i.src, i.alt)),
         author: { "@id": personId },
         creator: { "@id": personId },
@@ -202,13 +218,34 @@ export function projectSchema(project: Project) {
         }),
         sameAs: Object.values(project.links),
       },
-      breadcrumb(`${url}#breadcrumb`, [
-        { name: "Home", path: "/" },
-        { name: "Projects", path: "/projects" },
+      breadcrumb(locale, `${pageUrl}#breadcrumb`, [
+        { name: t.breadcrumb.home, path: "/" },
+        { name: t.projectsPage.title, path: "/projects" },
         { name: project.title, path: `/projects/${project.slug}` },
       ]),
-      personRef(),
-      { "@type": "WebSite", "@id": websiteId, url: siteUrl, name: profile.name },
+      personRef(locale),
+      websiteRef(locale),
+    ],
+  };
+}
+
+/** WebPage node for simple pages such as the privacy policy. */
+export function simplePageSchema(locale: Locale, path: string, name: string, description: string, dateModified: string) {
+  const pageUrl = url(locale, path);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name,
+        description,
+        inLanguage: locale,
+        dateModified,
+        isPartOf: { "@id": websiteId },
+      },
+      websiteRef(locale),
     ],
   };
 }

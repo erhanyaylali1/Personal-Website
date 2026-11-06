@@ -1,6 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { ui } from "@/content/ui";
+import { useLocale } from "./providers";
 import { Moon, Sun } from "./ui/icons";
 
 /** Runs before paint (inlined in <head>) so there is never a flash of the wrong theme. */
@@ -16,6 +18,7 @@ const getServerSnapshot = () => null;
 
 export function ThemeToggle() {
   const dark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const t = ui[useLocale()].theme;
 
   const toggle = () => {
     const next = !document.documentElement.classList.contains("dark");
@@ -29,8 +32,8 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-      title={dark ? "Light theme" : "Dark theme"}
+      aria-label={dark ? t.toLight : t.toDark}
+      title={dark ? t.light : t.dark}
       className="inline-flex size-10 items-center justify-center rounded-full text-fg-muted transition-[background-color,color] duration-200 hover:bg-surface hover:text-fg"
     >
       {/* Render both and swap via CSS so SSR markup is stable. */}

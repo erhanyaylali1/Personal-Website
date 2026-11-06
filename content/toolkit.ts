@@ -1,3 +1,5 @@
+import { tx, type Locale, type Text } from "@/lib/i18n";
+
 /**
  * Skills grouped by area. Groups — and items within each group — are ordered by
  * current hiring demand, highest first. `core` marks the in-demand skills with the
@@ -8,7 +10,9 @@
 export type ToolkitItem = { name: string; detail?: string; core?: boolean };
 export type ToolkitGroup = { title: string; items: ToolkitItem[] };
 
-export const toolkit: ToolkitGroup[] = [
+type Source = { title: Text; items: (Omit<ToolkitItem, "name"> & { name: Text })[] };
+
+const toolkit: Source[] = [
   {
     title: "Frontend",
     items: [
@@ -23,19 +27,19 @@ export const toolkit: ToolkitGroup[] = [
     ],
   },
   {
-    title: "Backend & real-time",
+    title: { en: "Backend & real-time", tr: "Backend ve gerçek zamanlı" },
     items: [
       { name: "Node.js", core: true }, // Accenture, Orion/Yapı Kredi full-stack, Rich Blog Post, E-Wallet
-      { name: "REST APIs", core: true }, // Express APIs behind Rich Blog Post and E-Wallet
+      { name: { en: "REST APIs", tr: "REST API'ler" }, core: true }, // Express APIs behind Rich Blog Post and E-Wallet
       { name: "WebSockets", detail: "Socket.IO", core: true }, // Erhan Oyunları
       { name: "Express" }, // Rich Blog Post, E-Wallet, Erhan Oyunları
-      { name: "JWT auth" }, // Rich Blog Post, E-Wallet
+      { name: { en: "JWT auth", tr: "JWT kimlik doğrulama" } }, // Rich Blog Post, E-Wallet
       { name: "Java", detail: "Spring" }, // Yapı Kredi Technology
       { name: "C#", detail: ".NET" }, // Ibtech
     ],
   },
   {
-    title: "Cloud & DevOps",
+    title: { en: "Cloud & DevOps", tr: "Bulut ve DevOps" },
     items: [
       { name: "AWS", detail: "Lambda, S3, Athena, Glue", core: true }, // Accenture
       { name: "Docker", core: true }, // Accenture
@@ -46,14 +50,14 @@ export const toolkit: ToolkitGroup[] = [
     ],
   },
   {
-    title: "AI-assisted development",
+    title: { en: "AI-assisted development", tr: "Yapay zeka destekli geliştirme" },
     items: [
       { name: "Claude Code", core: true }, // this site
       { name: "Google AI Studio" }, // Spordaş, Erhan Oyunları
     ],
   },
   {
-    title: "Data",
+    title: { en: "Data", tr: "Veri" },
     items: [
       { name: "MySQL" }, // E-Wallet
       { name: "MongoDB" }, // Rich Blog Post
@@ -62,17 +66,23 @@ export const toolkit: ToolkitGroup[] = [
     ],
   },
   {
-    title: "Search, quality & design",
+    title: { en: "Search, quality & design", tr: "Arama, kalite ve tasarım" },
     items: [
-      { name: "Technical SEO", core: true }, // Hesehus, Reyhan Eren
-      { name: "Accessibility", detail: "WCAG", core: true }, // Hesehus
-      { name: "Unit testing" }, // Yapı Kredi Technology
-      { name: "Structured data", detail: "JSON-LD" }, // Reyhan Eren, this site
-      { name: "Analytics", detail: "GA / GTM" }, // Reyhan Eren, CV (Google Console)
+      { name: { en: "Technical SEO", tr: "Teknik SEO" }, core: true }, // Hesehus, Reyhan Eren
+      { name: { en: "Accessibility", tr: "Erişilebilirlik" }, detail: "WCAG", core: true }, // Hesehus
+      { name: { en: "Unit testing", tr: "Birim testleri" } }, // Yapı Kredi Technology
+      { name: { en: "Structured data", tr: "Yapılandırılmış veri" }, detail: "JSON-LD" }, // Reyhan Eren, this site
+      { name: { en: "Analytics", tr: "Analitik" }, detail: "GA / GTM" }, // Reyhan Eren, CV (Google Console)
       { name: "Figma" }, // Civil Defence Ukraine
     ],
   },
 ];
 
+export const getToolkit = (locale: Locale): ToolkitGroup[] =>
+  toolkit.map((g) => ({
+    title: tx(g.title, locale),
+    items: g.items.map((i) => ({ ...i, name: tx(i.name, locale) })),
+  }));
+
 /** Flat list for metadata keywords and JSON-LD `knowsAbout`. */
-export const skillNames = toolkit.flatMap((g) => g.items.map((i) => i.name));
+export const getSkillNames = (locale: Locale) => getToolkit(locale).flatMap((g) => g.items.map((i) => i.name));

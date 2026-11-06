@@ -4,20 +4,23 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { profile } from "@/content/profile";
+import { ui } from "@/content/ui";
+import { localeNames, localePath, locales, stripLocale } from "@/lib/i18n";
+import { useLocale } from "./providers";
 import { ThemeToggle } from "./theme-toggle";
 import { Container } from "./ui/container";
 import { Close, Menu } from "./ui/icons";
 
-const nav = [
-  { id: "about", label: "About" },
-  { id: "experience", label: "Experience" },
-  { id: "projects", label: "Projects" },
-  { id: "contact", label: "Contact" },
-];
+const navIds = ["about", "experience", "projects", "contact"] as const;
 
 export function SiteHeader() {
-  const pathname = usePathname();
-  const onHome = pathname === "/";
+  const locale = useLocale();
+  const t = ui[locale].header;
+  const nav = navIds.map((id) => ({ id, label: t.nav[id] }));
+  // Locale-neutral path. The server renders the rewritten "/en/…" path and the browser shows "/…";
+  // stripping the prefix makes both agree, so there's no hydration mismatch.
+  const path = stripLocale(usePathname());
+  const onHome = path === "/";
   const [active, setActive] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -32,7 +35,7 @@ export function SiteHeader() {
   // Highlight the section currently crossing the upper third of the viewport.
   useEffect(() => {
     if (!onHome) return;
-    const els = nav.map((n) => document.getElementById(n.id)).filter((el): el is HTMLElement => !!el);
+    const els = navIds.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) if (e.isIntersecting) setActive(e.target.id);
@@ -58,22 +61,22 @@ export function SiteHeader() {
     >
       <Container className="flex h-16 items-center justify-between gap-6">
         <Link
-          href="/"
+          href={localePath(locale, "/")}
           className="text-[15px] font-semibold tracking-tight text-fg"
-          aria-label={`${profile.name}, home`}
+          aria-label={t.home(profile.name)}
           onClick={() => setOpen(false)}
         >
           {profile.name}
         </Link>
 
-        <nav aria-label="Primary" className="hidden md:block">
+        <nav aria-label={t.primaryNav} className="hidden md:block">
           <ul className="flex items-center gap-1">
             {nav.map((n) => {
               const isActive = onHome && active === n.id;
               return (
                 <li key={n.id}>
                   <Link
-                    href={`/#${n.id}`}
+                    href={localePath(locale, `/#${n.id}`)}
                     aria-current={isActive ? "location" : undefined}
                     className={`relative rounded-full px-3.5 py-2 text-sm transition-colors duration-200 ${
                       isActive ? "text-fg" : "text-fg-muted hover:text-fg"
@@ -94,13 +97,28 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1">
+          {locales
+            .filter((l) => l !== locale)
+            .map((l) => (
+              <Link
+                key={l}
+                href={localePath(l, path)}
+                hrefLang={l}
+                lang={l}
+                aria-label={ui[l].switchLanguage}
+                title={localeNames[l]}
+                className="inline-flex h-10 min-w-10 items-center justify-center rounded-full px-2 font-mono text-xs font-medium tracking-[0.08em] text-fg-muted uppercase transition-[background-color,color] duration-200 hover:bg-surface hover:text-fg"
+              >
+                {l}
+              </Link>
+            ))}
           <ThemeToggle />
           <button
             type="button"
             className="inline-flex size-10 items-center justify-center rounded-full text-fg-muted hover:bg-surface hover:text-fg md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? t.closeMenu : t.openMenu}
             onClick={() => setOpen((v) => !v)}
           >
             {open ? <Close width={20} height={20} /> : <Menu width={20} height={20} />}
@@ -110,7 +128,7 @@ export function SiteHeader() {
 
       <nav
         id="mobile-nav"
-        aria-label="Primary mobile"
+        aria-label={t.mobileNav}
         hidden={!open}
         className="border-t border-border md:hidden"
       >
@@ -119,7 +137,7 @@ export function SiteHeader() {
             {nav.map((n) => (
               <li key={n.id}>
                 <Link
-                  href={`/#${n.id}`}
+                  href={localePath(locale, `/#${n.id}`)}
                   onClick={() => setOpen(false)}
                   className="block py-3 text-lg font-medium text-fg"
                 >

@@ -1,11 +1,17 @@
 import Image from "next/image";
 import me from "@/assets/me.jpg";
-import { profile } from "@/content/profile";
+import { getProfile } from "@/content/profile";
+import { ui } from "@/content/ui";
+import { localePath } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale";
 import { ButtonLink } from "../ui/button";
 import { Container } from "../ui/container";
 import { ArrowRight, Download, MapPin } from "../ui/icons";
 
-export function Hero() {
+export async function Hero() {
+  const locale = await getLocale();
+  const profile = getProfile(locale);
+  const t = ui[locale].hero;
   return (
     <section aria-labelledby="hero-heading" className="pt-12 pb-20 sm:pt-20 sm:pb-28">
       <Container className="grid items-center gap-12 md:grid-cols-12 md:gap-8">
@@ -33,19 +39,19 @@ export function Hero() {
 
           <div className="rise mt-10 flex flex-wrap items-center gap-3" style={{ ["--i" as string]: 4 }}>
             <ButtonLink
-              href="/#projects"
+              href={localePath(locale, "/#projects")}
               icon={<ArrowRight className="transition-transform duration-200 group-hover:translate-x-0.5" />}
             >
-              View projects
+              {t.viewProjects}
             </ButtonLink>
             <a
               href={profile.cv}
               download="Erhan_Yaylali_CV.pdf"
               className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border-strong px-5 text-sm font-medium text-fg transition-[background-color,border-color,transform] duration-200 hover:border-fg/40 hover:bg-surface active:scale-[0.98]"
             >
-              Download CV
+              {t.downloadCv}
               <Download className="transition-transform duration-200 group-hover:translate-y-0.5" />
-              <span className="sr-only">(PDF)</span>
+              <span className="sr-only">{t.pdf}</span>
             </a>
           </div>
         </div>
@@ -55,7 +61,7 @@ export function Hero() {
           <figure className="relative isolate mx-auto w-full max-w-xs md:max-w-none">
             <Image
               src={me}
-              alt={`Portrait of ${profile.name} smiling by the sea at sunset`}
+              alt={t.portraitAlt}
               placeholder="blur"
               preload
               sizes="(min-width: 1024px) 360px, (min-width: 768px) 40vw, 320px"

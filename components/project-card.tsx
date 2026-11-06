@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/content/projects";
+import { ui } from "@/content/ui";
+import { localePath } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale";
 import { ArrowUpRight } from "./ui/icons";
 
 type Props = {
@@ -14,7 +17,9 @@ type Props = {
   headingLevel?: 2 | 3;
 };
 
-export function ProjectCard({ project, eager = false, featured = false, reverse = false, headingLevel = 3 }: Props) {
+export async function ProjectCard({ project, eager = false, featured = false, reverse = false, headingLevel = 3 }: Props) {
+  const locale = await getLocale();
+  const t = ui[locale].projects;
   const Heading = headingLevel === 2 ? "h2" : "h3";
   const cover = project.images[0];
   const portrait = project.cover === "portrait";
@@ -43,12 +48,12 @@ export function ProjectCard({ project, eager = false, featured = false, reverse 
 
       <div className={`mt-5 flex flex-1 flex-col ${featured ? "lg:col-span-5 lg:mt-0 lg:flex-none" : ""}`}>
         <p className="font-mono text-xs tracking-[0.12em] text-fg-subtle uppercase">
-          {featured && <span className="text-accent">Featured · </span>}
-          {project.category}
+          {featured && <span className="text-accent">{t.featured} · </span>}
+          {t.categories[project.category]}
         </p>
         <Heading className={`mt-2 font-semibold tracking-tight text-fg ${featured ? "text-xl lg:text-3xl" : "text-xl"}`}>
           <Link
-            href={`/projects/${project.slug}`}
+            href={localePath(locale, `/projects/${project.slug}`)}
             className="after:absolute after:inset-0 after:z-10 after:rounded-2xl focus-visible:outline-none"
           >
             {project.title}
@@ -61,7 +66,7 @@ export function ProjectCard({ project, eager = false, featured = false, reverse 
           </Link>
         </Heading>
         <p className={`mt-2 max-w-[52ch] leading-relaxed text-fg-muted ${featured ? "text-[15px] lg:mt-4 lg:text-[17px]" : "text-[15px]"}`}>{project.summary}</p>
-        <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Technologies">
+        <ul className="mt-4 flex flex-wrap gap-1.5" aria-label={t.technologies}>
           {shown.map((s) => (
             <li key={s} className="rounded-md bg-surface px-2 py-1 font-mono text-xs text-fg-muted">
               {s}
@@ -70,7 +75,7 @@ export function ProjectCard({ project, eager = false, featured = false, reverse 
           {rest > 0 && (
             <li className="rounded-md px-1 py-1 font-mono text-xs text-fg-subtle">
               +{rest}
-              <span className="sr-only"> more</span>
+              <span className="sr-only"> {t.more}</span>
             </li>
           )}
         </ul>

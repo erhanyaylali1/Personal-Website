@@ -1,9 +1,15 @@
-import { education } from "@/content/education";
-import { experience } from "@/content/experience";
+import { getEducation } from "@/content/education";
+import { getExperience } from "@/content/experience";
 import { profile, site, siteUrl } from "@/content/profile";
-import { projects } from "@/content/projects";
-import { toolkit } from "@/content/toolkit";
+import { getProjects } from "@/content/projects";
+import { getToolkit } from "@/content/toolkit";
 import { formatMonth } from "@/lib/format";
+
+// English, like the default site; the Turkish version is linked below.
+const projects = getProjects("en");
+const experience = getExperience("en");
+const education = getEducation("en");
+const toolkit = getToolkit("en");
 
 /**
  * /llms.txt — a plain-Markdown summary for AI assistants and AI search (llmstxt.org).
@@ -43,6 +49,7 @@ export function GET() {
     "",
     "## Optional",
     "",
+    `- [Turkish version of the site (Türkçe)](${siteUrl}/tr)`,
     `- [Privacy policy](${siteUrl}/privacy)`,
     `- [Sitemap](${siteUrl}/sitemap.xml)`,
     "",

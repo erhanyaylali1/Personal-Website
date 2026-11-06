@@ -1,5 +1,6 @@
-// Generated from assets/projects — alt text sourced from the Graphify image index.
+// Generated from assets/projects — alt text sourced from the Graphify image index, then translated.
 import type { StaticImageData } from "next/image";
+import type { Localized } from "@/lib/i18n";
 import type { ProjectSlug } from "./project-slugs";
 import reyhanEren01 from "@/assets/projects/reyhan-eren/01.png";
 import reyhanEren02 from "@/assets/projects/reyhan-eren/02.png";
@@ -43,58 +44,59 @@ import eWallet09 from "@/assets/projects/e-wallet/09.jpeg";
 import eWallet10 from "@/assets/projects/e-wallet/10.jpeg";
 
 export type ProjectImage = { src: StaticImageData; alt: string };
+export type ProjectImageSource = { src: StaticImageData; alt: Localized<string> };
 
 export const projectImages = {
   "reyhan-eren": [
-    { src: reyhanEren01, alt: "Homepage hero for family counselling and couples therapy in İzmir" },
-    { src: reyhanEren02, alt: "Services overview with individual, couples and family counselling cards" },
-    { src: reyhanEren03, alt: "Three-step explanation of how the counselling process works" },
-    { src: reyhanEren04, alt: "Couples therapy service page with booking and WhatsApp calls to action" },
-    { src: reyhanEren05, alt: "Blog index with a featured article" },
-    { src: reyhanEren06, alt: "Appointment request form with in-person and online session options" },
+    { src: reyhanEren01, alt: { en: "Homepage hero for family counselling and couples therapy in İzmir", tr: "İzmir'de aile danışmanlığı ve çift terapisi için ana sayfa girişi" } },
+    { src: reyhanEren02, alt: { en: "Services overview with individual, couples and family counselling cards", tr: "Bireysel, çift ve aile danışmanlığı kartlarıyla hizmetlere genel bakış" } },
+    { src: reyhanEren03, alt: { en: "Three-step explanation of how the counselling process works", tr: "Danışmanlık sürecinin nasıl işlediğini anlatan üç adımlı açıklama" } },
+    { src: reyhanEren04, alt: { en: "Couples therapy service page with booking and WhatsApp calls to action", tr: "Randevu ve WhatsApp eylem çağrılarıyla çift terapisi hizmet sayfası" } },
+    { src: reyhanEren05, alt: { en: "Blog index with a featured article", tr: "Öne çıkan bir yazıyla blog sayfası" } },
+    { src: reyhanEren06, alt: { en: "Appointment request form with in-person and online session options", tr: "Yüz yüze ve online seans seçenekleriyle randevu talep formu" } },
   ],
   "erhan-oyunlari": [
-    { src: erhanOyunlari01, alt: "Game library with open rooms and filters for two-player, four-player and party games" },
-    { src: erhanOyunlari02, alt: "Sequence match in progress against a bot, with chips on the board and the player's hand" },
-    { src: erhanOyunlari03, alt: "Azul game with factory displays, the player's board and an opponent bot's board" },
-    { src: erhanOyunlari04, alt: "King card game with four players and a trick in the middle of the table" },
-    { src: erhanOyunlari05, alt: "King contract selection with trump and penalty options" },
-    { src: erhanOyunlari06, alt: "Quoridor board with both pawns facing off and walls placed" },
-    { src: erhanOyunlari07, alt: "Çiz Bakalım drawing synced live to another player, with guesses in the chat" },
+    { src: erhanOyunlari01, alt: { en: "Game library with open rooms and filters for two-player, four-player and party games", tr: "Açık odalar ile iki kişilik, dört kişilik ve parti oyunu filtreleriyle oyun kütüphanesi" } },
+    { src: erhanOyunlari02, alt: { en: "Sequence match in progress against a bot, with chips on the board and the player's hand", tr: "Bota karşı devam eden Sequence maçı; tahtadaki fişler ve oyuncunun eli" } },
+    { src: erhanOyunlari03, alt: { en: "Azul game with factory displays, the player's board and an opponent bot's board", tr: "Fabrika vitrinleri, oyuncunun panosu ve rakip botun panosuyla Azul oyunu" } },
+    { src: erhanOyunlari04, alt: { en: "King card game with four players and a trick in the middle of the table", tr: "Dört oyunculu King oyunu ve masanın ortasında oynanan bir el" } },
+    { src: erhanOyunlari05, alt: { en: "King contract selection with trump and penalty options", tr: "Koz ve ceza seçenekleriyle King kontrat seçimi" } },
+    { src: erhanOyunlari06, alt: { en: "Quoridor board with both pawns facing off and walls placed", tr: "Karşı karşıya gelen iki piyon ve yerleştirilmiş duvarlarla Quoridor tahtası" } },
+    { src: erhanOyunlari07, alt: { en: "Çiz Bakalım drawing synced live to another player, with guesses in the chat", tr: "Başka bir oyuncuya canlı aktarılan Çiz Bakalım çizimi ve sohbetteki tahminler" } },
   ],
   "spordas": [
-    { src: spordas01, alt: "Feed of active matches filtered by sport, with the overall Elo leaderboard" },
-    { src: spordas02, alt: "Match detail with map location, weather, player count and join button" },
-    { src: spordas03, alt: "Player profile with recent form, win rate and Elo rating per sport" },
+    { src: spordas01, alt: { en: "Feed of active matches filtered by sport, with the overall Elo leaderboard", tr: "Spora göre filtrelenmiş aktif maç akışı ve genel Elo sıralaması" } },
+    { src: spordas02, alt: { en: "Match detail with map location, weather, player count and join button", tr: "Harita konumu, hava durumu, oyuncu sayısı ve katıl butonuyla maç detayı" } },
+    { src: spordas03, alt: { en: "Player profile with recent form, win rate and Elo rating per sport", tr: "Son form, kazanma oranı ve spor bazında Elo puanıyla oyuncu profili" } },
   ],
   "rich-blog-post": [
-    { src: richBlogPost01, alt: "Post feed on the home page" },
-    { src: richBlogPost02, alt: "Rich text editor for creating a new post" },
-    { src: richBlogPost03, alt: "Article view" },
-    { src: richBlogPost04, alt: "Editing an existing post" },
-    { src: richBlogPost05, alt: "Author profile" },
-    { src: richBlogPost06, alt: "Editing the author profile" },
-    { src: richBlogPost07, alt: "Posts filtered by the Coding category" },
-    { src: richBlogPost08, alt: "Admin panel for managing users" },
-    { src: richBlogPost09, alt: "Admin panel for categories and tags" },
-    { src: richBlogPost10, alt: "Sign-in page" },
+    { src: richBlogPost01, alt: { en: "Post feed on the home page", tr: "Ana sayfadaki yazı akışı" } },
+    { src: richBlogPost02, alt: { en: "Rich text editor for creating a new post", tr: "Yeni yazı oluşturmak için zengin metin editörü" } },
+    { src: richBlogPost03, alt: { en: "Article view", tr: "Yazı görünümü" } },
+    { src: richBlogPost04, alt: { en: "Editing an existing post", tr: "Mevcut bir yazıyı düzenleme" } },
+    { src: richBlogPost05, alt: { en: "Author profile", tr: "Yazar profili" } },
+    { src: richBlogPost06, alt: { en: "Editing the author profile", tr: "Yazar profilini düzenleme" } },
+    { src: richBlogPost07, alt: { en: "Posts filtered by the Coding category", tr: "Kodlama kategorisine göre filtrelenmiş yazılar" } },
+    { src: richBlogPost08, alt: { en: "Admin panel for managing users", tr: "Kullanıcı yönetimi için yönetim paneli" } },
+    { src: richBlogPost09, alt: { en: "Admin panel for categories and tags", tr: "Kategori ve etiketler için yönetim paneli" } },
+    { src: richBlogPost10, alt: { en: "Sign-in page", tr: "Giriş sayfası" } },
   ],
   "civil-defense-ukraine": [
-    { src: civilDefenseUkraine01, alt: "Homepage hero with donation call to action" },
-    { src: civilDefenseUkraine02, alt: "Footer with social media links" },
-    { src: civilDefenseUkraine03, alt: "About us page" },
-    { src: civilDefenseUkraine04, alt: "Contact page with form" },
+    { src: civilDefenseUkraine01, alt: { en: "Homepage hero with donation call to action", tr: "Bağış çağrısıyla ana sayfa girişi" } },
+    { src: civilDefenseUkraine02, alt: { en: "Footer with social media links", tr: "Sosyal medya bağlantılarıyla alt bilgi alanı" } },
+    { src: civilDefenseUkraine03, alt: { en: "About us page", tr: "Hakkımızda sayfası" } },
+    { src: civilDefenseUkraine04, alt: { en: "Contact page with form", tr: "İletişim formlu iletişim sayfası" } },
   ],
   "e-wallet": [
-    { src: eWallet01, alt: "Portfolio table with pie chart breakdown" },
-    { src: eWallet02, alt: "Portfolio allocation as a pie chart" },
-    { src: eWallet03, alt: "Portfolio allocation as a bar chart" },
-    { src: eWallet04, alt: "Asset values over time as a line chart" },
-    { src: eWallet05, alt: "Sign-up form" },
-    { src: eWallet06, alt: "Sign-in form" },
-    { src: eWallet07, alt: "Editing a USD asset amount" },
-    { src: eWallet08, alt: "Adding a new asset" },
-    { src: eWallet09, alt: "Delete asset confirmation dialog" },
-    { src: eWallet10, alt: "Turkish and English language switcher" },
+    { src: eWallet01, alt: { en: "Portfolio table with pie chart breakdown", tr: "Pasta grafik dağılımıyla portföy tablosu" } },
+    { src: eWallet02, alt: { en: "Portfolio allocation as a pie chart", tr: "Pasta grafik olarak portföy dağılımı" } },
+    { src: eWallet03, alt: { en: "Portfolio allocation as a bar chart", tr: "Çubuk grafik olarak portföy dağılımı" } },
+    { src: eWallet04, alt: { en: "Asset values over time as a line chart", tr: "Çizgi grafik olarak zaman içindeki varlık değerleri" } },
+    { src: eWallet05, alt: { en: "Sign-up form", tr: "Kayıt formu" } },
+    { src: eWallet06, alt: { en: "Sign-in form", tr: "Giriş formu" } },
+    { src: eWallet07, alt: { en: "Editing a USD asset amount", tr: "USD varlık miktarını düzenleme" } },
+    { src: eWallet08, alt: { en: "Adding a new asset", tr: "Yeni varlık ekleme" } },
+    { src: eWallet09, alt: { en: "Delete asset confirmation dialog", tr: "Varlık silme onay penceresi" } },
+    { src: eWallet10, alt: { en: "Turkish and English language switcher", tr: "Türkçe ve İngilizce dil seçici" } },
   ],
-} satisfies Record<ProjectSlug, ProjectImage[]>;
+} satisfies Record<ProjectSlug, ProjectImageSource[]>;
